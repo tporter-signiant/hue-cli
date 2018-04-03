@@ -1,0 +1,22 @@
+{
+  "name": "hue-cli",
+  "description": "Philips Hue command line interface to trigger lighting effects",
+  "keywords": [
+    "philips",
+    "hue",
+    "automation"
+  ],
+  "version": "1.0.0",
+  "engines": {
+    "node": ">=7.5"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "commander": "^2.15.1",
+    "lodash": "^4.17.5",
+    "node-hue-api": "^2.4.2"
+  },
+  "bin": {
+    "hue-cli": "./index.js"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "pulseGreen": [
+    {"on": true, "hue": 25500, "bri": 255, "sat": 255, "transition": 3000},
+    {"on": true, "hue": 25500, "bri": 5, "sat": 255, "transition": 3000},
+    {"on": true, "hue": 25500, "bri": 255, "sat": 255, "transition": 3000},
+    {"on": true, "hue": 25500, "bri": 5, "sat": 255, "transition": 3000}
+  ],
+  "pulseRed": [
+    {"on": true, "hue": 0, "bri": 255, "sat": 255, "transition": 3000},
+    {"on": true, "hue": 0, "bri": 5, "sat": 255, "transition": 3000},
+    {"on": true, "hue": 0, "bri": 255, "sat": 255, "transition": 3000},
+    {"on": true, "hue": 0, "bri": 5, "sat": 255, "transition": 3000}
+  ]
+}
