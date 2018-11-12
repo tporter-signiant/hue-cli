@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 const program = require('commander');
-const {HueApi, lightState} = require('node-hue-api');
+const { HueApi, lightState } = require('node-hue-api');
 const effects = require('./effects');
 
 program
@@ -11,44 +11,55 @@ program
     .option('--effect <effect-name>', 'Light effect to apply to group')
     .parse(process.argv);
 
-const hueApiClient = new HueApi(program.hostname, program.username);
+const { hostname, username, groupId, effect } = program;
+
+if (!hostname || !username || !groupId || !effect) {
+    return program.outputHelp((helpText) => helpText);
+}
+
+const hueClient = new HueApi(hostname, username);
 
 const toLightState = (stateObj) => {
     let state = lightState.create();
     state = stateObj.on ? state.on() : state.off();
-    return state.bri(stateObj.bri).hue(stateObj.hue).sat(stateObj.sat).transition(stateObj.transition || 1000);
+    return state
+        .bri(stateObj.bri)
+        .hue(stateObj.hue)
+        .sat(stateObj.sat)
+        .transition(stateObj.transition || 1000);
 };
 
 const getGroupLightStates = async (groupId) => {
-    const {lights} = await hueApiClient.getGroup(groupId);
-    const lightStatuses = await Promise.all(lights.map(light => hueApiClient.lightStatus(light)));
+    const { lights } = await hueClient.getGroup(groupId);
+    const lightStatuses = await Promise.all(lights.map((light) => hueClient.lightStatus(light)));
 
     return lightStatuses.map((lightStatus, index) => ({
         id: lights[index],
-        state: toLightState(lightStatus.state)
+        state: toLightState(lightStatus.state),
     }));
 };
 
 const setLightStates = async (lightStates) =>
-    Promise.all(lightStates.map(lightState => hueApiClient.setLightState(lightState.id, lightState.state)));
+    Promise.all(lightStates.map((lightState) => hueClient.setLightState(lightState.id, lightState.state)));
 
-const delay = (delayInMs) => () => new Promise(function(resolve) {
-    setTimeout(resolve, delayInMs);
-});
+const delay = (delayInMs) => () =>
+    new Promise(function(resolve) {
+        setTimeout(resolve, delayInMs);
+    });
 
-(async function () {
+(async function() {
     const queue = [];
-    const lightStates = await getGroupLightStates(program.groupId);
+    const lightStates = await getGroupLightStates(groupId);
 
-    effects[program.effect].forEach((effectState) => {
+    effects[effect].forEach((effectState) => {
         const state = toLightState(effectState);
-        queue.push(() => hueApiClient.setGroupLightState(program.groupId, state));
+        queue.push(() => hueClient.setGroupLightState(groupId, state));
         queue.push(delay(effectState.transition));
     });
 
     let next;
 
-    while (next = queue.shift()) {
+    while ((next = queue.shift())) {
         await next();
     }
 
