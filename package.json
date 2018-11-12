@@ -12,9 +12,14 @@
   },
   "main": "index.js",
   "dependencies": {
-    "commander": "^2.15.1",
-    "lodash": "^4.17.5",
-    "node-hue-api": "^2.4.2"
+    "commander": "^2.19.0",
+    "node-hue-api": "^2.4.4"
   },
-  "bin": "./index.js"
+  "bin": "./index.js",
+  "devDependencies": {
+    "eslint": "^5.9.0",
+    "eslint-config-prettier": "^3.3.0",
+    "eslint-plugin-prettier": "^3.0.0",
+    "prettier": "^1.15.2"
+  }
 }
